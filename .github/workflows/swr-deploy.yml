@@ -44,4 +44,6 @@ jobs:
       with:
         context: .
         push: true
-        tags: latest
+        tags: [my-image:latest][swr.cn-north-4.myhuaweicloud.com]/[demo-test1]/[demo:latest]
+
+
