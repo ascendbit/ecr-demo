@@ -23,16 +23,16 @@ jobs:
       - name: Authenticate to Huawei Cloud
         uses: huaweicloud/auth-action@v1.1.0
         with: 
-          access_key_id: ${{ secrets.HUAWEI_ACCESS_KEY_ID }}
-          secret_access_key: ${{ secrets.HUAWEI_SECRET_ACCESS_KEY }}
+          access_key_id: UQR2PI8IV37OMUJCGI8J
+          secret_access_key: mtcFY0bqUOe0rz977vJOA5EX9rz6repv0TqHgqlq
           region: 'cn-north-4'
 
       - name: Log in to Huawei Cloud SWR
         uses: huaweicloud/swr-login@v2.1.0
         with:
           region: 'cn-north-4'
-          access-key-id: ${{ secrets.HUAWEI_ACCESS_KEY_ID }}
-          access-key-secret: ${{ secrets.HUAWEI_SECRET_ACCESS_KEY }}
+          access-key-id: UQR2PI8IV37OMUJCGI8J
+          access-key-secret: mtcFY0bqUOe0rz977vJOA5EX9rz6repv0TqHgqlq
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v2
