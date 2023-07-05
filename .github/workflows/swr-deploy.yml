@@ -3,47 +3,40 @@
 name: Deploy to SWR
 
 # Controls when the workflow will run
-on: push
-  # Triggers the workflow on push or pull request events but only for the master branch
+on:
+  push:
+    branches:
+      - master
 
 jobs:
-  
   build:
-    
     name: Build Image
     runs-on: ubuntu-latest
-    #container:
-      #image: docker:latest
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
+      - name: Check out code
+        uses: actions/checkout@v2
 
-    - name: Check out code
-      uses: actions/checkout@v2
-
-    - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v1
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
    
-    - name: Authenticate to Huawei Cloud
-      uses: huaweicloud/auth-action@v1.1.0
-      with: 
-          access_key_id: UQR2PI8IV37OMUJCGI8J 
-          secret_access_key: mtcFY0bqUOe0rz977vJOA5EX9rz6repv0TqHgqlq
+      - name: Authenticate to Huawei Cloud
+        uses: huaweicloud/auth-action@v1.1.0
+        with: 
+          access_key_id: ${{ secrets.HUAWEI_ACCESS_KEY_ID }}
+          secret_access_key: ${{ secrets.HUAWEI_SECRET_ACCESS_KEY }}
           region: 'cn-north-4'
 
-    - name: Log in to Huawei Cloud SWR
-      uses: huaweicloud/swr-login@v2.1.0
-      with:
-          region: cn-north-4
-          access-key-id: UQR2PI8IV37OMUJCGI8J
-          access-key-secret: mtcFY0bqUOe0rz977vJOA5EX9rz6repv0TqHgqlq
+      - name: Log in to Huawei Cloud SWR
+        uses: huaweicloud/swr-login@v2.1.0
+        with:
+          region: 'cn-north-4'
+          access-key-id: ${{ secrets.HUAWEI_ACCESS_KEY_ID }}
+          access-key-secret: ${{ secrets.HUAWEI_SECRET_ACCESS_KEY }}
 
-
-    - name: Build and push Docker image
-      uses: docker/build-push-action@v2
-      with:
-        context: .
-        push: true
-        tags: [my-image:latest][swr.cn-north-4.myhuaweicloud.com]/[demo-test1]/[demo:latest]
-
-
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          push: true
+          tags: swr.cn-north-4.myhuaweicloud.com/demo-test1/demo:latest
