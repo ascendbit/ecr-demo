@@ -23,12 +23,14 @@ jobs:
         with: 
           access_key_id: UQR2PI8IV37OMUJCGI8J
           secret_access_key: mtcFY0bqUOe0rz977vJOA5EX9rz6repv0TqHgqlq
-          region: 'cn-north-4'
+          #region: 'cn-north-4'
+          region: 'ap-southeast-2'
 
       - name: Log in to Huawei Cloud SWR
         uses: huaweicloud/swr-login@v2.1.0
         with:
-          region: 'cn-north-4'
+          #region: 'cn-north-4'
+          region: 'ap-southeast-2'
           access-key-id: UQR2PI8IV37OMUJCGI8J
           access-key-secret: mtcFY0bqUOe0rz977vJOA5EX9rz6repv0TqHgqlq
 
@@ -37,4 +39,5 @@ jobs:
         with:
           context: .
           push: true
-          tags: swr.cn-north-4.myhuaweicloud.com/demo-test1/demo:latest
+          #tags: swr.cn-north-4.myhuaweicloud.com/demo-test1/demo:latest
+          tags: swr.ap-southeast-2.myhuaweicloud.com/ascendbit/nodejsdemo:latest
