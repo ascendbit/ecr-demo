@@ -29,7 +29,8 @@ jobs:
           ECR_REGISTRY: 459949229680.dkr.ecr.ap-southeast-1.amazonaws.com
           ECR_REPOSITORY: docker_nodejs_demo
           IMAGE_TAG: nodejs_demo_image
-        run: docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+        run: docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+      
 
       - name: Run Trivy scan
         run: docker run --rm -v ${{ github.workspace }}:/workdir aquasec/trivy $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
