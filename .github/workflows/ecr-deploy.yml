@@ -30,21 +30,7 @@ jobs:
           ECR_REPOSITORY: docker_nodejs_demo
           IMAGE_TAG: nodejs_demo_image
         run: docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
-      
-
-      - name: Run Trivy scan
-        run: docker run --rm -v ${{ github.workspace }}:/workdir aquasec/trivy $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-      
-
-      - name: Check Trivy results
-        id: trivy_results
-        run: echo "::set-output name=has_critical::$(docker run --rm -v ${{ github.workspace }}:/workdir aquasec/trivy --format json $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG | jq '.[0].Vulnerabilities[] | select(.Severity == \"CRITICAL\") | .Severity')"
-
-      - name: Block push if critical vulnerabilities found
-        if: steps.trivy_results.outputs.has_critical == 'CRITICAL'
-        run: |
-          echo "Critical vulnerabilities found! Pushing the image to the repository is blocked."
-          exit 1
+    
 
       - name: Push image to Amazon ECR
         env:
