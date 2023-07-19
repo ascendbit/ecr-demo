@@ -33,7 +33,7 @@ jobs:
       
 
       - name: Run Trivy scan
-        run: docker run --rm -v ${{ github.workspace }}:/workdir aquasec/trivy image $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+        run: docker run --rm -v ${{ github.workspace }}:/workdir aquasec/trivy $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
       
 
       - name: Check Trivy results
