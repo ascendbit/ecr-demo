@@ -1,0 +1,54 @@
+name: Release
+# update changleg, commit tag and push
+on:
+  workflow_dispatch:
+
+jobs:
+  release:
+    # do not run if it's already tagged
+    if: ${{ !startsWith(github.ref , 'refs/tags/v') }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.PACKAGE_PAT }}
+          # The branch, tag or SHA to checkout. When checking out the repository that
+          # triggered a workflow, this defaults to the reference or SHA for that event.
+          # Otherwise, uses the default branch.
+          # ref: 'master' so using default
+          # Number of commits to fetch. 0 indicates all history for all branches and tags.
+          # Default: 1 but we need to fetch at least tags, we do that later next steps
+          fetch-depth: 0
+
+      - name: Set GitHub Actions as commit author
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Setup sv4git
+        run: |
+          curl -s https://api.github.com/repos/bvieira/sv4git/releases/latest | jq -r '.assets[] | select(.browser_download_url | contains("linux")) | .browser_download_url' | wget -O /tmp/sv4git.tar.gz -qi - \
+            && tar -C /usr/local/bin -xzf /tmp/sv4git.tar.gz
+
+      # - name: Tag and changelog
+      #   id: version
+      #   run: |
+      #     VERSION=$(git sv cv)
+      #     echo $VERSION
+      #     echo "version=$VERSION" >> $GITHUB_OUTPUT
+      #     echo "tag=v$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Update CHANGELOG.md
+        run: |
+          git sv changelog --add-next-version > CHANGELOG.md
+          git add CHANGELOG.md
+          git commit -m "chore: release v$(git sv nv)"
+          git push
+          git sv tag
+
+#  publish:
+#    needs: release
+#    uses: ./.github/workflows/publish.yml
+#    secrets: inherit
